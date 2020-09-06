@@ -1,0 +1,126 @@
+﻿@model HomeIndexViewModel
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row mb-5">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Artists</h5>
+                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
+                <p class="card-text">@Model.ArtistCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Playlists</h5>
+                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
+                <p class="card-text">@Model.PlaylistCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Folders</h5>
+                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
+                <p class="card-text">@Model.FolderCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Size</h5>
+                <p class="card-text">@(Model.FolderSizeCumulated / 1000000)Gb</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (Model.Artists == null || Model.Artists.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 artists. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Artist" asp-action="Create" role="button">artist</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var artist in Model.Artists)
+                {
+                    <tr>
+                        <td>@artist.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    <div class="col-md-4">
+        @if (Model.Playlists == null || Model.Playlists.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 playlists. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Playlist" asp-action="Create" role="button">playlist</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var playlist in Model.Playlists)
+                {
+                    <tr>
+                        <td>@playlist.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    <div class="col-md-4">
+        @if (Model.Folders == null || Model.Folders.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 folders. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Artist" asp-action="Create" role="button">folder</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var folder in Model.Folders)
+                {
+                    <tr>
+                        <td>@folder.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+
+</div>

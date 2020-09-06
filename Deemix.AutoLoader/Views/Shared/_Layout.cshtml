@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Deemix AutoLoader</title>
+
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Deemix Autoloader</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                    <partial name="_LoginPartial" />
+
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Artist" ? "active" : "")" asp-area="" asp-controller="Artist" asp-action="Index">Artists</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Playlist" ? "active" : "")" asp-area="" asp-controller="Playlist" asp-action="Index">Playlists</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Folder" ? "active" : "")" asp-area="" asp-controller="Folder" asp-action="Index">Folders</a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            @if (ViewData["Title"] != null && ViewData["Message"] != null)
+            {
+                <div class="page-header">
+                    <h1>@ViewData["Title"]</h1>
+                    <h4>@ViewData["Message"]</h4>
+                </div>
+
+                <hr />
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2018 - @DateTime.Now.Year | <a href="https://listrr.pro">listrr.pro</a> | <a href="https://discord.gg/6PQseA7" target="_blank">Discord</a> | <a href="https://github.com/sponsors/TheUltimateC0der" target="_blank">Donate</a> | <a href="https://github.com/TheUltimateC0der/Listrr" target="_blank">GitHub</a> | Theme: <a href="https://bootswatch.com/darkly/" target="_blank">Darkly</a>
+        </div>
+    </footer>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

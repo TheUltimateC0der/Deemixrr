@@ -1,0 +1,20 @@
+﻿@model FolderDeleteViewModel
+@{
+    ViewData["Title"] = "Delete folder";
+    ViewData["Message"] = "Are you sure?";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+            <form asp-controller="Folder" asp-action="Delete" method="post">
+                <p>Do you really want to delete the list <code>@Model.Folder.Name</code> which is tied to <code>@Model.ArtistCount</code> artists?</p>
+                <p>THIS WILL DELETE ALL ARTISTS ASSOCIATED WITH IT!</p>
+
+                @Html.HiddenFor(x => x.Folder.Id)
+
+                <button type="submit" class="btn btn-danger">Yes, I am sure!</button>
+            </form>
+        </div>
+    </div>
+</div>

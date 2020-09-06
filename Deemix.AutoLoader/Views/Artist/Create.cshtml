@@ -1,0 +1,112 @@
+﻿@model ArtistCreateInputModel
+
+@{
+    ViewData["Title"] = "Artist";
+    ViewData["Message"] = "Choose ONE of these options to add artist(s)";
+}
+
+<form asp-controller="Artist" asp-action="Create" method="post">
+    <div class="row">
+
+        <div class="col-md-12 mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Single artist</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Add a single artist</h6>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">https://www.deezer.com/en/artist/</span>
+                                    </div>
+                                    <input class="form-control" asp-for="ArtistDeezerId">
+                                </div>
+                                <small class="form-text text-muted">The Deezer Id of the artist</small>
+                                <span asp-validation-for="ArtistDeezerId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Scrape playlist</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Add all artists in this playlist</h6>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">https://www.deezer.com/en/playlist/</span>
+                                    </div>
+                                    <input class="form-control" asp-for="PlaylistDeezerId">
+                                </div>
+                                <small class="form-text text-muted">The Deezer Id of the playlist</small>
+                                <span asp-validation-for="PlaylistDeezerId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">CSV import</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Import all of your artists from a csv file</h6>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" asp-for="ArtistDeezerIds"></textarea>
+                                <small class="form-text text-muted">The format is <code>2113,53527,283893,23894</code></small>
+                                <span asp-validation-for="ArtistDeezerIds" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Storing</h5>
+                    <h6 class="card-subtitle mb-1 text-muted">Select the path where all that stuff should get stored</h6>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <select asp-for="FolderId" asp-items="Model.Folders" class="form-control" data-placeholder="Select a folder"></select>
+                                <small class="form-text text-muted">The folder you want to store this artist to</small>
+                                <span asp-validation-for="FolderId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary float-right">Submit</button>
+        </div>
+
+    </div>
+</form>
