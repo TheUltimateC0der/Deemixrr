@@ -1,66 +1,44 @@
 ﻿@page
 @model RegisterModel
-@{
-    ViewData["Title"] = "Register";
-}
+@{ ViewData["Title"] = "Register"; }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+<form class="col-lg-6 col-md-8 col-10 mx-auto" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div class="mx-auto text-center my-4">
+        <a class="navbar-brand mx-auto mt-2 flex-fill text-center" asp-controller="Home" asp-action="Index">
+            <img src="~/img/logo.svg" height="150" />
+        </a>
+        <h2 class="my-3">Sign Up</h2>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to register.</h4>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+    <div class="form-group">
+        <label asp-for="Input.Email">Email</label>
+        <input asp-for="Input.Email" class="form-control">
     </div>
-</div>
+    <hr class="my-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Password">New Password</label>
+                <input asp-for="Input.Password" class="form-control">
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p class="mb-2">Password requirements</p>
+            <p class="small text-muted mb-2">To create a new password, you have to meet all of the following requirements:</p>
+            <ul class="small text-muted pl-4 mb-0">
+                <li>Minimum 8 character </li>
+                <li>At least one special character</li>
+                <li>At least one number</li>
+                <li>Just don´t be an idiot, and use a safe password</li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2018 - @DateTime.Now.Year</p>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

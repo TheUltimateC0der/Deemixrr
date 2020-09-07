@@ -1,10 +1,12 @@
-﻿namespace Deemix.AutoLoader.Services
+﻿using Deemix.AutoLoader.Data;
+
+namespace Deemix.AutoLoader.Services
 {
     public interface IDeemixService
     {
 
-        void DownloadArtist(string artistUrl);
-        void DownloadPlaylist(string playlistUrl);
+        void DownloadArtist(Artist artist);
+        void DownloadPlaylist(Playlist playlist);
 
     }
 }

@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Deemix.AutoLoader.Models;
 using Deemix.AutoLoader.Repositories;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Deemix.AutoLoader.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -11,6 +11,8 @@ using Deemix.AutoLoader.Services;
 
 using E.Deezer.Api;
 
+using Hangfire;
+
 namespace Deemix.AutoLoader.Jobs.BackgroundJobs
 {
     public class CreatePlaylistBackgroundJob : IBackgroundJob<CreatePlaylistBackgroundJobData>
@@ -26,7 +28,7 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-
+        [MaximumConcurrentExecutions(1)]
         public async Task Execute(CreatePlaylistBackgroundJobData param, bool queueNext = false)
         {
             var folder = await _dataRepository.GetFolder(param.FolderId);
@@ -63,6 +65,8 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
                     if (parsed)
                     {
                         await CheckAndCreatePlaylist(await _deezerApiService.GetDeezerApi().Playlists.GetById(artistId, CancellationToken.None), folder);
+
+                        await Task.Delay(500);
                     }
                 }
             }
@@ -80,6 +84,8 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
                 newPlaylist.FolderId = folder.Id;
 
                 await _dataRepository.CreatePlaylist(newPlaylist);
+
+                BackgroundJob.Enqueue<CheckPlaylistForUpdatesBackgroundJob>(x => x.Execute(deezerPlaylist.Id, false));
             }
         }
     }

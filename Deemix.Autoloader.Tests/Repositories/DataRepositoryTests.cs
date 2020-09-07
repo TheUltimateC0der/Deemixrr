@@ -92,6 +92,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetArtistByStringTest()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             var artist = new Artist
             {
                 DeezerId = 1337,
@@ -100,6 +106,10 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
+            artist.FolderId = folder.Id;
 
             await repo.CreateArtist(artist);
 
@@ -115,6 +125,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetArtistByULongTest()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             var artist = new Artist
             {
                 DeezerId = 1337,
@@ -123,6 +139,10 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
+            artist.FolderId = folder.Id;
 
             await repo.CreateArtist(artist);
 
@@ -138,6 +158,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetArtistsWithSkipAndTake()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             IList<Artist> artists = new List<Artist>
             {
                 new Artist
@@ -159,8 +185,13 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
             foreach (var artist in artists)
             {
+                artist.FolderId = folder.Id;
+
                 await repo.CreateArtist(artist);
             }
 
@@ -182,6 +213,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetLastUpdatedArtists()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             IList<Artist> artists = new List<Artist>
             {
                 new Artist
@@ -203,11 +240,13 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+            await repo.CreateFolder(folder);
+
             foreach (var artist in artists)
             {
-                await repo.CreateArtist(artist);
+                artist.FolderId = folder.Id;
 
-                await Task.Delay(1500);
+                await repo.CreateArtist(artist);
             }
 
             var dbArtists = await repo.GetLastUpdatedArtists(1, 2);
@@ -447,6 +486,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetPlaylistByStringTest()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             var playlist = new Playlist
             {
                 DeezerId = 1337,
@@ -455,6 +500,10 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
+            playlist.FolderId = folder.Id;
 
             await repo.CreatePlaylist(playlist);
 
@@ -470,6 +519,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetPlaylistByULongTest()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             var playlist = new Playlist
             {
                 DeezerId = 1337,
@@ -478,6 +533,10 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
+            playlist.FolderId = folder.Id;
 
             await repo.CreatePlaylist(playlist);
 
@@ -493,6 +552,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetPlaylistsWithSkipAndTake()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             IList<Playlist> playlists = new List<Playlist>
             {
                 new Playlist
@@ -514,8 +579,13 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
             foreach (var playlist in playlists)
             {
+                playlist.FolderId = folder.Id;
+
                 await repo.CreatePlaylist(playlist);
             }
 
@@ -537,6 +607,12 @@ namespace Deemix.Autoloader.Tests.Repositories
         public async Task GetLastUpdatedPlaylists()
         {
             //Arrange
+            var folder = new Folder
+            {
+                Name = "Test folder",
+                Path = "/mnt/mount/media",
+                Size = 5000
+            };
             IList<Playlist> playlists = new List<Playlist>
             {
                 new Playlist
@@ -558,11 +634,14 @@ namespace Deemix.Autoloader.Tests.Repositories
 
             //Act
             var repo = _dataRepositoryFixture.GetCleanRepo();
+
+            await repo.CreateFolder(folder);
+
             foreach (var playlist in playlists)
             {
-                await repo.CreatePlaylist(playlist);
+                playlist.FolderId = folder.Id;
 
-                await Task.Delay(1500);
+                await repo.CreatePlaylist(playlist);
             }
 
             var dbPlaylists = await repo.GetLastUpdatedPlaylists(1, 2);

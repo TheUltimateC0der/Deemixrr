@@ -38,12 +38,14 @@ namespace Deemix.AutoLoader.Repositories
         public async Task<Artist> GetArtist(string id)
         {
             return await _appDbContext.Artists
+                .Include(x => x.Folder)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Artist> GetArtist(ulong id)
         {
             return await _appDbContext.Artists
+                .Include(x => x.Folder)
                 .FirstOrDefaultAsync(x => x.DeezerId == id);
         }
 
@@ -189,12 +191,14 @@ namespace Deemix.AutoLoader.Repositories
         public async Task<Playlist> GetPlaylist(string id)
         {
             return await _appDbContext.Playlists
+                .Include(x => x.Folder)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Playlist> GetPlaylist(ulong id)
         {
             return await _appDbContext.Playlists
+                .Include(x => x.Folder)
                 .FirstOrDefaultAsync(x => x.DeezerId == id);
         }
 

@@ -2,15 +2,6 @@
 
 Deemix Autoloader manages your artists and playlists completely automated. You add your favorite artists and playlists, and Deemix Autoloader does the rest for you.
 
-[![Discord: https://discord.gg/Zxc9hcU](https://img.shields.io/discord/751788862644158504?color=blue&label=Discord&style=for-the-badge)](https://discord.gg/Zxc9hcU)
-[![GitHub: Last commit date (develop)](https://img.shields.io/github/last-commit/TheUltimateC0der/Deemix.Autoloader/develop.svg?style=for-the-badge&colorB=177DC1)](https://github.com/TheUltimateC0der/Deemix.Autoloader/commits/develop)
-<br/>
-[![Docker Automated build: theultimatecoder/deemix.autoloader](https://img.shields.io/docker/cloud/automated/theultimatecoder/deemix.autoloader?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemix.autoloader)
-[![Docker Build Status: theultimatecoder/deemix.autoloader](https://img.shields.io/docker/cloud/build/theultimatecoder/deemix.autoloader?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemix.autoloader)
-[![Docker Pulls: theultimatecoder/deemix.autoloader](https://img.shields.io/docker/pulls/theultimatecoder/deemix.autoloader?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemix.autoloader)
-
-
-
 ### What Deemix Autoloader does for you
 
 - Manage your Artists

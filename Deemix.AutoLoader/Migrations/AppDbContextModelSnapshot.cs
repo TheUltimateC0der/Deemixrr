@@ -49,9 +49,24 @@ namespace Deemix.AutoLoader.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeezerId");
+
                     b.HasIndex("FolderId");
 
                     b.ToTable("Artists");
+                });
+
+            modelBuilder.Entity("Deemix.AutoLoader.Data.ConfigValue", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ConfigValues");
                 });
 
             modelBuilder.Entity("Deemix.AutoLoader.Data.Folder", b =>
@@ -100,6 +115,8 @@ namespace Deemix.AutoLoader.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DeezerId");
+
                     b.ToTable("Genres");
                 });
 
@@ -129,6 +146,8 @@ namespace Deemix.AutoLoader.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeezerId");
 
                     b.HasIndex("FolderId");
 

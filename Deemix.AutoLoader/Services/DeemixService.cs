@@ -1,20 +1,20 @@
-﻿
+﻿using Deemix.AutoLoader.Data;
 using Deemix.AutoLoader.Helpers;
 
 namespace Deemix.AutoLoader.Services
 {
     public class DeemixService : IDeemixService
     {
-        private readonly string BaseCommand = "deemix {0}";
+        private readonly string BaseCommand = "{0} -p {1}";
 
-        public void DownloadArtist(string artistUrl)
+        public void DownloadArtist(Artist artist)
         {
-            string.Format(BaseCommand, artistUrl).Bash();
+            string.Format(BaseCommand, $"https://www.deezer.com/en/artist/{artist.DeezerId}", artist.Folder.Path).Deemix();
         }
 
-        public void DownloadPlaylist(string playlistUrl)
+        public void DownloadPlaylist(Playlist playlist)
         {
-            string.Format(BaseCommand, playlistUrl).Bash();
+            string.Format(BaseCommand, $"https://www.deezer.com/en/playlist/{playlist.DeezerId}", playlist.Folder.Path).Deemix();
         }
     }
 }

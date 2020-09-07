@@ -65,10 +65,18 @@ namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            //var hasUser = await _userManager.Users.AnyAsync();
+
+            //if (hasUser)
+            //    return RedirectToPage("Login");
+
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -78,8 +86,8 @@ namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
             if (hasUser)
                 return LocalRedirect("/");
 
+            returnUrl ??= Url.Content("~/");
 
-            returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {

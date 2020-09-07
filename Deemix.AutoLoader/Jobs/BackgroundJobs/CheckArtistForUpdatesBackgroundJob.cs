@@ -29,15 +29,16 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [DisableConcurrentExecution(Int32.MaxValue)]
+        [MaximumConcurrentExecutions(1)]
         public async Task Execute(ulong param, bool queueNext = false)
         {
             var dbArtist = await _dataRepository.GetArtist(param);
             if (dbArtist == null)
             {
-                var apiArtist = _deezerApiService.GetDeezerApi().Artists.GetById(param, CancellationToken.None);
+                var apiArtist = await _deezerApiService.GetDeezerApi().Artists.GetById(param, CancellationToken.None);
 
-                dbArtist = await _dataRepository.CreateArtist(_mapper.Map<Artist>(apiArtist));
+                await _dataRepository.CreateArtist(_mapper.Map<Artist>(apiArtist));
+                dbArtist = await _dataRepository.GetArtist(apiArtist.Id);
             }
 
             if (dbArtist != null)
@@ -48,7 +49,7 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
                 if (dbArtist.NumberOfAlbums != apiArtist.NumberOfAlbums ||
                     dbArtist.NumberOfTracks != numberOfTracks)
                 {
-                    //_deemixService.DownloadArtist(apiArtist.Link);
+                    _deemixService.DownloadArtist(dbArtist);
 
                     dbArtist.NumberOfTracks = numberOfTracks;
                     dbArtist.NumberOfAlbums = apiArtist.NumberOfAlbums;
@@ -68,6 +69,8 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
             {
                 foreach (var album in await artist.Albums(CancellationToken.None, offset))
                 {
+                    await Task.Delay(500);
+
                     var apiAlbum = await _deezerApiService.GetDeezerApi().Albums.GetById(album.Id, CancellationToken.None);
 
                     trackCount += apiAlbum.TrackCount;

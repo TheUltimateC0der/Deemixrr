@@ -8,6 +8,8 @@ using Deemix.AutoLoader.Data;
 using Deemix.AutoLoader.Repositories;
 using Deemix.AutoLoader.Services;
 
+using Hangfire;
+
 namespace Deemix.AutoLoader.Jobs.RecurringJobs
 {
     public class ScrapeGenreRecurringJob : IRecurringJob
@@ -23,6 +25,7 @@ namespace Deemix.AutoLoader.Jobs.RecurringJobs
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [MaximumConcurrentExecutions(1)]
         public async Task Execute()
         {
             var genres = await _deezerApiService.GetDeezerApi().Genre.GetCommonGenre(CancellationToken.None);

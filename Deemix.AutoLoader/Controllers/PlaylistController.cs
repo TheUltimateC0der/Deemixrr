@@ -12,12 +12,14 @@ using Deemix.AutoLoader.Services;
 
 using Hangfire;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 
 namespace Deemix.AutoLoader.Controllers
 {
+    [Authorize]
     public class PlaylistController : Controller
     {
         private readonly ILogger<PlaylistController> _logger;
@@ -86,7 +88,7 @@ namespace Deemix.AutoLoader.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PlaylistCreateInputModel model)
+        public IActionResult Create(PlaylistCreateInputModel model)
         {
             if (!ModelState.IsValid) return BadRequest();
 

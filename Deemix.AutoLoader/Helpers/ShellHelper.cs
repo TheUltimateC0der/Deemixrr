@@ -24,5 +24,26 @@ namespace Deemix.AutoLoader.Helpers
             process.WaitForExit();
             return result;
         }
+
+        public static string Deemix(this string args)
+        {
+            var escapedArgs = args.Replace("\"", "\\\"");
+
+            var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "deemix",
+                    Arguments = escapedArgs,
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
+            process.Start();
+            string result = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            return result;
+        }
     }
 }

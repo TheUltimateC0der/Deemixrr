@@ -12,12 +12,15 @@ using Deemix.AutoLoader.Services;
 
 using Hangfire;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 
 namespace Deemix.AutoLoader.Controllers
 {
+
+    [Authorize]
     public class ArtistController : Controller
     {
         private readonly ILogger<ArtistController> _logger;
@@ -100,6 +103,7 @@ namespace Deemix.AutoLoader.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var artist = await _dataRepository.GetArtist(id);
+            if (artist == null) return View("Error");
 
             return View(new ArtistDeleteViewModel()
             {

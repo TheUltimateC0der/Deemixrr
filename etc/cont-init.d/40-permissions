@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+echo "[cont-init.d] Setting permissions on /app ..."
+chown -R abc:abc /app
+echo "[cont-init.d] Setting permissions on /app Done!"

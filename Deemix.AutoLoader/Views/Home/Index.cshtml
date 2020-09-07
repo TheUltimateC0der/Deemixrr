@@ -2,48 +2,83 @@
 
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    ViewData["Message"] = "All valuable information in one place";
 }
 
 <div class="row mb-5">
-    <div class="col-md-3">
-        <div class="card">
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
             <div class="card-body">
-                <h5 class="card-title">Artists</h5>
-                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
-                <p class="card-text">@Model.ArtistCount</p>
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-user text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Artists</p>
+                        <span class="h3 mb-0">@Model.ArtistCount</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card">
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
             <div class="card-body">
-                <h5 class="card-title">Playlists</h5>
-                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
-                <p class="card-text">@Model.PlaylistCount</p>
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-list text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Playlists</p>
+                        <span class="h3 mb-0">@Model.PlaylistCount</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card">
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
             <div class="card-body">
-                <h5 class="card-title">Folders</h5>
-                @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
-                <p class="card-text">@Model.FolderCount</p>
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-folder text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Folders</p>
+                        <span class="h3 mb-0">@Model.FolderCount</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card">
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
             <div class="card-body">
-                <h5 class="card-title">Size</h5>
-                <p class="card-text">@(Model.FolderSizeCumulated / 1000000)Gb</p>
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-download-cloud text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Storage</p>
+                        <span class="h3 mb-0">@(Model.FolderSizeCumulated / 1000000000)GB</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="row">

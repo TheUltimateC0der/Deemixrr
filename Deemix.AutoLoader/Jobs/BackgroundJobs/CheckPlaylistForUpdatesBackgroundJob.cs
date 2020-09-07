@@ -27,15 +27,16 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [DisableConcurrentExecution(Int32.MaxValue)]
+        [MaximumConcurrentExecutions(1)]
         public async Task Execute(ulong param, bool queueNext = false)
         {
             var dbPlaylist = await _dataRepository.GetPlaylist(param);
             if (dbPlaylist == null)
             {
-                var apiPlaylist = _deezerApiService.GetDeezerApi().Playlists.GetById(param, CancellationToken.None);
+                var apiPlaylist = await _deezerApiService.GetDeezerApi().Playlists.GetById(param, CancellationToken.None);
 
-                dbPlaylist = await _dataRepository.CreatePlaylist(_mapper.Map<Playlist>(apiPlaylist));
+                await _dataRepository.CreatePlaylist(_mapper.Map<Playlist>(apiPlaylist));
+                dbPlaylist = await _dataRepository.GetPlaylist(apiPlaylist.Id);
             }
 
             if (dbPlaylist != null)
@@ -44,7 +45,7 @@ namespace Deemix.AutoLoader.Jobs.BackgroundJobs
 
                 if (dbPlaylist.NumberOfTracks != apiPlaylist.NumberOfTracks)
                 {
-                    //_deemixService.DownloadPlaylist(apiPlaylist.Link);
+                    _deemixService.DownloadPlaylist(dbPlaylist);
 
                     dbPlaylist.NumberOfTracks = apiPlaylist.NumberOfTracks;
 

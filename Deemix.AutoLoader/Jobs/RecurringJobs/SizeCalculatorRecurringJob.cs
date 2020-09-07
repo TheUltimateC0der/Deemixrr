@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Deemix.AutoLoader.Helpers;
 using Deemix.AutoLoader.Repositories;
 
+using Hangfire;
+
 namespace Deemix.AutoLoader.Jobs.RecurringJobs
 {
     public class SizeCalculatorRecurringJob : IRecurringJob
@@ -16,6 +18,7 @@ namespace Deemix.AutoLoader.Jobs.RecurringJobs
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
         }
 
+        [MaximumConcurrentExecutions(1)]
         public async Task Execute()
         {
             var folders = await _dataRepository.GetFolders();

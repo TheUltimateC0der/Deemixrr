@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+
 using Deemix.AutoLoader.Data;
+
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
@@ -22,7 +22,7 @@ namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<User> signInManager, 
+        public LoginModel(SignInManager<User> signInManager,
             ILogger<LoginModel> logger,
             UserManager<User> userManager)
         {
@@ -45,18 +45,25 @@ namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
+            [Display(Prompt = "E-Mail address")]
             public string Email { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Prompt = "Password")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            var hasUser = await _userManager.Users.AnyAsync();
+
+            if (!hasUser)
+                return RedirectToPage("Register");
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -70,6 +77,8 @@ namespace Deemix.AutoLoader.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

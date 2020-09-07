@@ -1,4 +1,3 @@
-
 using System;
 
 using AutoMapper;
@@ -49,6 +48,10 @@ namespace Deemix.AutoLoader
             Configuration.Bind("DeezerApi", deezerApiConfiguration);
             services.AddSingleton(deezerApiConfiguration);
 
+            var jobConfiguration = new JobConfiguration();
+            Configuration.Bind("JobConfiguration", jobConfiguration);
+            services.AddSingleton(jobConfiguration);
+
             //Hangfire
             services.AddHangfire(x =>
                 x.UseSqlServerStorage(connectionString)
@@ -71,8 +74,10 @@ namespace Deemix.AutoLoader
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
         {
+            InitializeDatabase(app);
+
             //ReverseProxy Fix
             app.UseForwardedHeaders();
             app.Use((context, next) =>
@@ -100,7 +105,7 @@ namespace Deemix.AutoLoader
             app.UseAuthentication();
             app.UseAuthorization();
 
-            InitializeHangfire(app, serviceProvider, hangFireConfiguration);
+            InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
 
             app.UseEndpoints(endpoints =>
             {
@@ -121,19 +126,25 @@ namespace Deemix.AutoLoader
             });
         }
 
-
-
-
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var appDb = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                appDb.Database.EnsureCreated();
+                appDb.Database.Migrate();
+            }
+        }
 
         //Hangfire Initialization
-        private void InitializeHangfire(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration)
+        private void InitializeHangfire(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
         {
             GlobalConfiguration.Configuration
                 .UseActivator(new HangfireActivator(serviceProvider));
 
             applicationBuilder.UseHangfireServer(new BackgroundJobServerOptions
             {
-                WorkerCount = hangFireConfiguration.Workers
+                WorkerCount = hangFireConfiguration.Workers == 0 ? 1 : hangFireConfiguration.Workers
             });
 
             applicationBuilder.UseHangfireDashboard(hangFireConfiguration.DashboardPath ?? "/jobs", new DashboardOptions
@@ -145,15 +156,10 @@ namespace Deemix.AutoLoader
                 } }
             });
 
-            RecurringJob.AddOrUpdate<FavoriteArtistsRecurringJob>(x => x.Execute(), Cron.Never);
-            RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(), Cron.Never);
-            //RecurringJob.AddOrUpdate<GetShowCertificationsRecurringJob>(x => x.Execute(), Cron.Daily);
+            RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(), Cron.Daily);
+            RecurringJob.AddOrUpdate<SizeCalculatorRecurringJob>(x => x.Execute(), jobConfiguration.SizeCalculatorRecurringJob);
+            RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(), jobConfiguration.GetUpdatesRecurringJob);
 
-            //Starting all jobs here for initial db fill
-            //foreach (var recurringJob in JobStorage.Current.GetConnection().GetRecurringJobs())
-            //{
-            //    RecurringJob.Trigger(recurringJob.Id);
-            //}
         }
 
     }
