@@ -6,14 +6,14 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Deemix.AutoLoader/Deemix.AutoLoader.csproj", "Deemix.AutoLoader/"]
-RUN dotnet restore "Deemix.AutoLoader/Deemix.AutoLoader.csproj"
+COPY ["Deemixrr/Deemixrr.csproj", "Deemixrr/"]
+RUN dotnet restore "Deemixrr/Deemixrr.csproj"
 COPY . .
-WORKDIR "/src/Deemix.AutoLoader"
-RUN dotnet build "Deemix.AutoLoader.csproj" -c Release -o /app/build
+WORKDIR "/src/Deemixrr"
+RUN dotnet build "Deemixrr.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Deemix.AutoLoader.csproj" -c Release -o /app/publish
+RUN dotnet publish "Deemixrr.csproj" -c Release -o /app/publish
 
 FROM base AS final
 
