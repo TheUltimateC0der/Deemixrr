@@ -1,0 +1,45 @@
+﻿@page
+@model RegisterModel
+@{ ViewData["Title"] = "Register"; }
+
+<form class="col-lg-6 col-md-8 col-10 mx-auto" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div class="mx-auto text-center my-4">
+        <a class="navbar-brand mx-auto mt-2 flex-fill text-center" asp-controller="Home" asp-action="Index">
+            <img src="~/img/logo.svg" height="150" />
+        </a>
+        <h2 class="my-3">Sign Up</h2>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Email">Email</label>
+        <input asp-for="Input.Email" class="form-control">
+    </div>
+    <hr class="my-4">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Input.Password">New Password</label>
+                <input asp-for="Input.Password" class="form-control">
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <input asp-for="Input.ConfirmPassword" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p class="mb-2">Password requirements</p>
+            <p class="small text-muted mb-2">To create a new password, you have to meet all of the following requirements:</p>
+            <ul class="small text-muted pl-4 mb-0">
+                <li>Minimum 8 character </li>
+                <li>At least one special character</li>
+                <li>At least one number</li>
+                <li>Just don´t be an idiot, and use a safe password</li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2018 - @DateTime.Now.Year</p>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

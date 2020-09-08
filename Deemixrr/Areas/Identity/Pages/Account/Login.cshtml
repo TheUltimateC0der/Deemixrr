@@ -1,0 +1,33 @@
+﻿@page
+@model LoginModel
+
+@{ ViewData["Title"] = "Log in"; }
+
+<form class="col-lg-3 col-md-4 col-10 mx-auto text-center" method="post">
+    <div class="mx-auto text-center my-4">
+        <a class="navbar-brand mx-auto mt-2 flex-fill text-center" asp-controller="Home" asp-action="Index">
+            <img src="~/img/logo.svg" height="150" />
+        </a>
+        <h2 class="my-3">Sign In</h2>
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Email" class="sr-only">Email address</label>
+        <input asp-for="Input.Email" class="form-control form-control-lg">
+    </div>
+    <div class="form-group">
+        <label asp-for="Input.Password" class="sr-only">Password</label>
+        <input asp-for="Input.Password" class="form-control form-control-lg">
+    </div>
+    <div class="checkbox mb-3">
+        <label asp-for="Input.RememberMe">
+            <input asp-for="Input.RememberMe" />
+            @Html.DisplayNameFor(m => m.Input.RememberMe)
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Let me in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2018 - @DateTime.Now.Year</p>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

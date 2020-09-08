@@ -1,0 +1,98 @@
+[
+  {
+    "outputFileName": "wwwroot/css/apexcharts.min.css",
+    "inputFiles": [
+      "wwwroot/css/apexcharts.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/app-dark.min.css",
+    "inputFiles": [
+      "wwwroot/css/app-dark.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/app-light.min.css",
+    "inputFiles": [
+      "wwwroot/css/app-light.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/app-rtl.min.css",
+    "inputFiles": [
+      "wwwroot/css/app-rtl.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/bootstrap-datepicker.min.css",
+    "inputFiles": [
+      "wwwroot/css/bootstrap-datepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/dataTables.bootstrap4.min.css",
+    "inputFiles": [
+      "wwwroot/css/dataTables.bootstrap4.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/daterangepicker.min.css",
+    "inputFiles": [
+      "wwwroot/css/daterangepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/feather.min.css",
+    "inputFiles": [
+      "wwwroot/css/feather.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/fullcalendar.min.css",
+    "inputFiles": [
+      "wwwroot/css/fullcalendar.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jquery.steps.min.css",
+    "inputFiles": [
+      "wwwroot/css/jquery.steps.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jquery.timepicker.min.css",
+    "inputFiles": [
+      "wwwroot/css/jquery.timepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/perfect-scrollbar.min.css",
+    "inputFiles": [
+      "wwwroot/css/perfect-scrollbar.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/quill.snow.min.css",
+    "inputFiles": [
+      "wwwroot/css/quill.snow.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/select2.min.css",
+    "inputFiles": [
+      "wwwroot/css/select2.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/select2-bootstrap4.min.css",
+    "inputFiles": [
+      "wwwroot/css/select2-bootstrap4.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/simplebar.min.css",
+    "inputFiles": [
+      "wwwroot/css/simplebar.css"
+    ]
+  }
+]

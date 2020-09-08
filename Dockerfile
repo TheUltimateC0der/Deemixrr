@@ -1,35 +1,31 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+FROM lsiobase/ubuntu:bionic AS base
+
 WORKDIR /app
 
 EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Deemix.AutoLoader/Deemix.AutoLoader.csproj", "Deemix.AutoLoader/"]
-RUN dotnet restore "Deemix.AutoLoader/Deemix.AutoLoader.csproj"
+COPY ["Deemixrr/Deemixrr.csproj", "Deemixrr/"]
+RUN dotnet restore "Deemixrr/Deemixrr.csproj"
 COPY . .
-WORKDIR "/src/Deemix.AutoLoader"
-RUN dotnet build "Deemix.AutoLoader.csproj" -c Release -o /app/build
+WORKDIR "/src/Deemixrr"
+RUN dotnet build "Deemixrr.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Deemix.AutoLoader.csproj" -c Release -o /app/publish
+RUN dotnet publish "Deemixrr.csproj" -c Release -o /app/publish
 
 FROM base AS final
 
-# Install deemix
-RUN apt-get update && apt-get install python3 python3-pip git -y
-RUN python3 --version
-RUN python3 -m pip install deemix
-
-RUN \
-    groupmod -g 1001 users && \
-    useradd -u 1000 -U -d /config -s /bin/false abc && \
-    usermod -G users abc && \
-    mkdir /config && \
-    chown abc:abc /config
-
-USER abc
-
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Deemix.AutoLoader.dll"]
+
+RUN curl https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb --output packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb
+
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip apt-transport-https aspnetcore-runtime-3.1
+
+COPY /etc /etc
+
+ENTRYPOINT ["/init"]

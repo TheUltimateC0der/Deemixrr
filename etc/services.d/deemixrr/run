@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+cd /app || exit
+
+HOME=/config
+
+exec \
+	s6-setuidgid abc dotnet /app/Deemixrr.dll

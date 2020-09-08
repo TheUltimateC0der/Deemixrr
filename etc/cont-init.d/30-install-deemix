@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+echo "[cont-init.d] Installing Deemix ..."
+python3 -m pip install --quiet deemix
+echo "[cont-init.d] Installing Deemix: Done!"
