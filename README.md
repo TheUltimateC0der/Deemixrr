@@ -2,7 +2,7 @@
 
 Deemixrr manages your artists and playlists completely automated. You add your favorite artists and playlists, and Deemixrr does the rest for you.
 
-[![Discord: https://discord.gg/Zxc9hcU](https://img.shields.io/discord/751788862644158504?color=blue&label=Discord&style=for-the-badge)](https://discord.gg/Zxc9hcU)
+[![Discord: https://discord.gg/qJQPqR8](https://img.shields.io/discord/751788862644158504?color=blue&label=Discord&style=for-the-badge)](https://discord.gg/qJQPqR8)
 [![GitHub: Last commit date (develop)](https://img.shields.io/github/last-commit/TheUltimateC0der/Deemixrr/develop.svg?style=for-the-badge&colorB=177DC1)](https://github.com/TheUltimateC0der/Deemixrr/commits/develop)
 <br/>
 [![Docker Automated build: theultimatecoder/deemixrr](https://img.shields.io/docker/cloud/automated/theultimatecoder/deemixrr?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemixrr)
