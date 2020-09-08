@@ -9,7 +9,7 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 [![Docker Build Status: theultimatecoder/deemixrr](https://img.shields.io/docker/cloud/build/theultimatecoder/deemixrr?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemixrr)
 [![Docker Pulls: theultimatecoder/deemixrr](https://img.shields.io/docker/pulls/theultimatecoder/deemixrr?color=blue&style=for-the-badge)](https://hub.docker.com/r/theultimatecoder/deemixrr)
 
-### What Deemixrr does for you
+## What Deemixrr does for you
 
 - Manage your Artists
 - Manage your Playlists
@@ -17,8 +17,21 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 - Automatically updates your artists
 - Calculates the size of your media
 
+## Screenshots
 
-### How to spin-up your own instance
+#### Dashboard
+![Dashboard](/screenshots/dashboard.png "Dashboard")
+
+#### Create folder
+![Dashboard](/screenshots/folder-create.png "Dashboard")
+
+#### Create artist
+![Dashboard](/screenshots/artist-create.png "Dashboard")
+
+#### Create playlist
+![Dashboard](/screenshots/playlist-create.png "Dashboard")
+
+## How to spin-up your own instance
 
 #### Docker-Compose
 
