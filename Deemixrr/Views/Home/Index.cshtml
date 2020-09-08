@@ -1,0 +1,161 @@
+﻿@model Deemixrr.Models.HomeIndexViewModel
+
+
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Message"] = "All valuable information in one place";
+}
+
+<div class="row mb-5">
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-user text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Artists</p>
+                        <span class="h3 mb-0">@Model.ArtistCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-list text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Playlists</p>
+                        <span class="h3 mb-0">@Model.PlaylistCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-folder text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Folders</p>
+                        <span class="h3 mb-0">@Model.FolderCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-3 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <span class="circle circle-sm bg-primary">
+                            <i class="fe fe-16 fe-download-cloud text-white mb-0"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <p class="small text-muted mb-0">Storage</p>
+                        <span class="h3 mb-0">@(Model.FolderSizeCumulated / 1000000000)GB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (Model.Artists == null || Model.Artists.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 artists. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Artist" asp-action="Create" role="button">artist</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var artist in Model.Artists)
+                {
+                    <tr>
+                        <td>@artist.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    <div class="col-md-4">
+        @if (Model.Playlists == null || Model.Playlists.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 playlists. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Playlist" asp-action="Create" role="button">playlist</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var playlist in Model.Playlists)
+                {
+                    <tr>
+                        <td>@playlist.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+    <div class="col-md-4">
+        @if (Model.Folders == null || Model.Folders.Count == 0)
+        {
+            <div class="alert alert-info" role="alert">
+                #FeelsBadMan You currently have exactly 0 folders. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Artist" asp-action="Create" role="button">folder</a>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td><b>Name</b></td>
+                    </tr>
+                </thead>
+                @foreach (var folder in Model.Folders)
+                {
+                    <tr>
+                        <td>@folder.Name</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+
+
+</div>

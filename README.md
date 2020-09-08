@@ -1,8 +1,8 @@
-# Deemix.Autoloader
+# Deemixrr
 
-Deemix Autoloader manages your artists and playlists completely automated. You add your favorite artists and playlists, and Deemix Autoloader does the rest for you.
+Deemixrr manages your artists and playlists completely automated. You add your favorite artists and playlists, and Deemixrr does the rest for you.
 
-### What Deemix Autoloader does for you
+### What Deemixrr does for you
 
 - Manage your Artists
 - Manage your Playlists
@@ -15,18 +15,18 @@ Deemix Autoloader manages your artists and playlists completely automated. You a
 
 #### Docker-Compose
 
-```
+```docker
 version: "3"
 services:
-    deemix-autoloader:
-        image: "theultimatecoder/deemix.autoloader:master"
+    deemixrr:
+        image: "theultimatecoder/deemixrr:master"
         environment:
             # Connectionstring for the database
-            ConnectionStrings__DefaultConnection: "server=mssql;uid=sa;pwd=H^yi4HtSY$rgd@ptd9PD6YN#dJni6HsNnG^kouXB62zcd4jQKAyw3hp3HcCA7Zp2qco6R&!oC%YzCV#!B5r@tWZerb6KB3NywiCzbeVy#Z6m#q6$Dq4WgFb2!o%vLV^T;database=Deemix.Autoloader;pooling=true"
+            ConnectionStrings__DefaultConnection: "server=mssql;uid=sa;pwd=H^yi4HtSY$rgd@ptd9PD6YN#dJni6HsNnG^kouXB62zcd4jQKAyw3hp3HcCA7Zp2qco6R&!oC%YzCV#!B5r@tWZerb6KB3NywiCzbeVy#Z6m#q6$Dq4WgFb2!o%vLV^T;database=Deemixrr;pooling=true"
             # Hangfire dashboard
             Hangfire__DashboardPath: "/autoloaderjobs"
             Hangfire__Password: "p2S3cVY6Yojkby9PYG3AbGPqVzbo8KLS"
-            Hangfire__Username: "Autoloader"
+            Hangfire__Username: "Deemixrr"
             Hangfire__Workers: "2"
             # Configure the cron expression for your jobs
             JobConfiguration__GetUpdatesRecurringJob: "15 * * * *"
@@ -41,7 +41,7 @@ services:
             - mssql
         volumes:
             # Mount the deemix config files
-            /opt/deemix-autoloader/deemix:/config/.config/deemix
+            /opt/deemixrr/deemix:/config/.config/deemix
             # Mount your media folder
             /mnt/unionfs:/mnt/unionfs
     mssql:
@@ -51,5 +51,5 @@ services:
             ACCEPT_EULA: "Y"
         volumes:
             # Persist the db files
-            /opt/deemix-autoloader/mssql:/var/opt/mssql
+            /opt/deemixrr/mssql:/var/opt/mssql
 ```
