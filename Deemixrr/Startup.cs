@@ -69,6 +69,7 @@ namespace Deemixrr
             services.AddSingleton<IDeezerApiService, DeezerApiService>();
             services.AddSingleton<IDeemixService, DeemixService>();
             services.AddScoped<IDataRepository, DataRepository>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
 
             services.AddAutoMapper(typeof(Startup));
         }
