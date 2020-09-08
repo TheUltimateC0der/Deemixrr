@@ -26,7 +26,7 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 version: '3'
 services:
     deemixrr:
-        image: theultimatecoder/deemixrr:nightly
+        image: theultimatecoder/deemixrr:latest
         environment:
             # Connectionstring for the database
             - ConnectionStrings__DefaultConnection=server=mssql;uid=sa;pwd=H^yi4HtSY$rgd@ptd9PD6YN#dJni6HsNnG^kouXB62zcd4jQKAyw3hp3HcCA7Zp2qco6R&!oC%YzCV#!B5r@tWZerb6KB3NywiCzbeVy#Z6m#q6$Dq4WgFb2!o%vLV^T;database=Deemixrr;pooling=true
