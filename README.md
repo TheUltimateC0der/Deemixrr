@@ -16,6 +16,13 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 - Automatically updates your playlists
 - Automatically updates your artists
 - Calculates the size of your media
+- Add artists by Deezer Id
+- Add artists by scraping them from a playlist
+- Add artists by adding multiple Deezer Ids seperated by a ,
+- Select an individual storing location for each artist
+- Add playlists by Deezer Id
+- Add playlists by adding multiple Deezer Ids seperated by a ,
+- Select an individual storing location for each playlist
 
 ## Screenshots
 
