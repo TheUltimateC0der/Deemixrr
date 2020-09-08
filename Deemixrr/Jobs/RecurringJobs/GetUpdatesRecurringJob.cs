@@ -9,21 +9,19 @@ using Deemixrr.Services;
 
 using Hangfire;
 
-using Microsoft.Extensions.Configuration;
-
 namespace Deemixrr.Jobs.RecurringJobs
 {
     public class GetUpdatesRecurringJob : IRecurringJob
     {
+        private readonly IConfigurationService _configurationService;
         private readonly IDeezerApiService _deezerApiService;
         private readonly IDataRepository _dataRepository;
-        private readonly IConfiguration _configuration;
 
-        public GetUpdatesRecurringJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IConfiguration configuration)
+        public GetUpdatesRecurringJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IConfigurationService configurationService)
         {
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
         }
 
         [MaximumConcurrentExecutions(1)]
@@ -34,14 +32,15 @@ namespace Deemixrr.Jobs.RecurringJobs
             {
                 var updatesList = updates.ToList();
                 var latestAlbum = updatesList.FirstOrDefault();
+                var lastChangeId = await _configurationService.Get<ulong>("LastChangeId");
 
                 if (latestAlbum != null)
                 {
-                    if (latestAlbum.Id.ToString() != _configuration["LastChangeId"])
+                    if (latestAlbum.Id != lastChangeId)
                     {
                         foreach (var album in updatesList)
                         {
-                            if (latestAlbum.Id.ToString() == _configuration["LastChangeId"])
+                            if (latestAlbum.Id == lastChangeId)
                                 break;
 
                             var dbArtist = await _dataRepository.GetArtist(album.Artist.Id);
@@ -59,7 +58,7 @@ namespace Deemixrr.Jobs.RecurringJobs
                         }
                     }
 
-                    _configuration["LastChangeId"] = latestAlbum.Id.ToString();
+                    await _configurationService.Set("LastChangeId", latestAlbum.Id);
                 }
             }
         }

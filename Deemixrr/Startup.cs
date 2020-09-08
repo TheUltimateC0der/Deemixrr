@@ -131,7 +131,7 @@ namespace Deemixrr
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var appDb = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                appDb.Database.EnsureCreated();
+                //appDb.Database.EnsureCreated();
                 appDb.Database.Migrate();
             }
         }
