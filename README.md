@@ -24,23 +24,11 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 - Add playlists by adding multiple Deezer Ids seperated by a ,
 - Select an individual storing location for each playlist
 
-## Screenshots
-
-#### Dashboard
-![Dashboard](/screenshots/dashboard.png "Dashboard")
-
-#### Create folder
-![Dashboard](/screenshots/folder-create.png "Dashboard")
-
-#### Create artist
-![Dashboard](/screenshots/artist-create.png "Dashboard")
-
-#### Create playlist
-![Dashboard](/screenshots/playlist-create.png "Dashboard")
-
 ## How to spin-up your own instance
 
 #### Docker-Compose
+
+If you already experienced with deemix, you can use this as a starting point. For more advanced setup, please have a look here: https://github.com/TheUltimateC0der/Deemixrr/wiki/Host-your-own
 
 ```yaml
 version: '3'
@@ -81,3 +69,20 @@ services:
             # Persist the db files
             - /opt/deemixrr/mssql:/var/opt/mssql
 ```
+
+
+
+
+## Screenshots
+
+#### Dashboard
+![Dashboard](/screenshots/dashboard.png "Dashboard")
+
+#### Create folder
+![Create folder](/screenshots/folder-create.png "Create folder")
+
+#### Create artist
+![Create artist](/screenshots/artist-create.png "Create artist")
+
+#### Create playlist
+![Create playlist](/screenshots/playlist-create.png "Create playlist")
