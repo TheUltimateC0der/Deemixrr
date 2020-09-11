@@ -2,8 +2,11 @@
 using System.Threading.Tasks;
 
 using Deemixrr.Data;
+using Deemixrr.Jobs.BackgroundJobs;
 using Deemixrr.Models;
 using Deemixrr.Repositories;
+
+using Hangfire;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -93,5 +96,34 @@ namespace Deemixrr.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> Scan(string id)
+        {
+            var folder = await _dataRepository.GetFolder(id);
+            var folderArtistCount = await _dataRepository.GetFolderArtistCount(folder);
+
+            return View(new FolderScanViewModel()
+            {
+                Folder = folder,
+                ArtistCount = folderArtistCount
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Scan(FolderScanViewModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var folder = await _dataRepository.GetFolder(model.Folder.Id);
+            if (folder == null) return BadRequest();
+
+            folder.State = Enums.ProcessingState.Queued;
+
+            await _dataRepository.UpdateFolder(folder);
+
+            BackgroundJob.Enqueue<ImportArtistsBackgroundJob>(x => x.Execute(folder.Id, false));
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

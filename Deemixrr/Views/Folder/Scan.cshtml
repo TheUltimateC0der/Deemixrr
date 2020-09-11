@@ -1,0 +1,25 @@
+﻿@model Deemixrr.Models.FolderScanViewModel
+@{
+    ViewData["Title"] = "Scan folder";
+    ViewData["Message"] = "Are you sure?";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            This assumes, that each subfolder in <code>@Model.Folder.Path</code> represents an artist.
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            <form asp-controller="Folder" asp-action="Scan" method="post">
+                <p>Do you really want to scan the path <code>@Model.Folder.Path</code> for already existing artists? Depending on the amount, this could take somewhere from 1 minute to multiple hours.</p>
+                <p>This cannot be stopped once triggered!</p>
+
+                @Html.HiddenFor(x => x.Folder.Id)
+
+                <button type="submit" class="btn btn-danger">Yes, I am sure!</button>
+            </form>
+        </div>
+    </div>
+</div>

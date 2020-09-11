@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Deemixrr.Configuration;
 using Deemixrr.Data;
 using Deemixrr.Repositories;
 using Deemixrr.Services;
@@ -14,13 +15,15 @@ namespace Deemixrr.Jobs.BackgroundJobs
 {
     public class CheckPlaylistForUpdatesBackgroundJob : IBackgroundJob<ulong>
     {
+        private readonly DelayConfiguration _delayConfiguration;
         private readonly IDeezerApiService _deezerApiService;
         private readonly IDataRepository _dataRepository;
         private readonly IDeemixService _deemixService;
         private readonly IMapper _mapper;
 
-        public CheckPlaylistForUpdatesBackgroundJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IDeemixService deemixService, IMapper mapper)
+        public CheckPlaylistForUpdatesBackgroundJob(DelayConfiguration delayConfiguration, IDeezerApiService deezerApiService, IDataRepository dataRepository, IDeemixService deemixService, IMapper mapper)
         {
+            _delayConfiguration = delayConfiguration ?? throw new ArgumentNullException(nameof(delayConfiguration));
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
             _deemixService = deemixService ?? throw new ArgumentNullException(nameof(deemixService));
@@ -37,6 +40,8 @@ namespace Deemixrr.Jobs.BackgroundJobs
 
                 await _dataRepository.CreatePlaylist(_mapper.Map<Playlist>(apiPlaylist));
                 dbPlaylist = await _dataRepository.GetPlaylist(apiPlaylist.Id);
+
+                await Task.Delay(_delayConfiguration.CheckPlaylistForUpdatesBackgroundJob_ExecuteDelay);
             }
 
             if (dbPlaylist != null)

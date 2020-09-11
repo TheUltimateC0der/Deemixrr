@@ -35,6 +35,7 @@
                         <td><b>Path</b></td>
                         <td><b>Created</b></td>
                         <td><b>Updated</b></td>
+                        <td><b>State</b></td>
                         <td><b>Action</b></td>
                     </tr>
                 </thead>
@@ -45,8 +46,12 @@
                         <td>@folder.Path</td>
                         <td>@folder.Created</td>
                         <td>@folder.Updated</td>
+                        <td>@folder.State.ToString()</td>
                         <td>
-                            <a asp-controller="Folder" asp-action="Delete" asp-route-Id="@folder.Id" class="btn btn-danger btn-sm">Delete</a>
+                            <div class="btn-group" role="group">
+                                <a asp-controller="Folder" asp-action="Scan" asp-route-Id="@folder.Id" class="btn btn-primary btn-sm">Scan</a>
+                                <a asp-controller="Folder" asp-action="Delete" asp-route-Id="@folder.Id" class="btn btn-danger btn-sm">Delete</a>
+                            </div>
                         </td>
                     </tr>
                 }

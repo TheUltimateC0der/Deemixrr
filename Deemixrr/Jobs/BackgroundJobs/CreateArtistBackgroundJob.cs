@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Deemixrr.Configuration;
 using Deemixrr.Data;
 using Deemixrr.Jobs.Models;
 using Deemixrr.Repositories;
@@ -17,12 +19,14 @@ namespace Deemixrr.Jobs.BackgroundJobs
 {
     public class CreateArtistBackgroundJob : IBackgroundJob<CreateArtistBackgroundJobData>
     {
+        private readonly DelayConfiguration _delayConfiguration;
         private readonly IDeezerApiService _deezerApiService;
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;
 
-        public CreateArtistBackgroundJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IMapper mapper)
+        public CreateArtistBackgroundJob(DelayConfiguration delayConfiguration, IDeezerApiService deezerApiService, IDataRepository dataRepository, IMapper mapper)
         {
+            _delayConfiguration = delayConfiguration ?? throw new ArgumentNullException(nameof(delayConfiguration));
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -46,6 +50,12 @@ namespace Deemixrr.Jobs.BackgroundJobs
                 return;
             }
 
+            if (param.UserProfileId != 0)
+            {
+                await FromUser(param.UserProfileId, folder);
+                return;
+            }
+
             if (string.IsNullOrEmpty(param.ArtistDeezerIds) == false)
             {
                 await FromCsv(param.ArtistDeezerIds, folder);
@@ -64,10 +74,11 @@ namespace Deemixrr.Jobs.BackgroundJobs
             var playlist = await _deezerApiService.GetDeezerApi().Playlists.GetById(playlistId, CancellationToken.None);
 
             uint offset = 0;
+            uint fetchCount = 50;
 
             while (true)
             {
-                foreach (var track in await playlist.Tracks(CancellationToken.None, offset))
+                foreach (var track in await playlist.Tracks(CancellationToken.None, offset, fetchCount))
                 {
                     await CheckAndCreateArtist(track.Artist, folder);
                 }
@@ -76,12 +87,29 @@ namespace Deemixrr.Jobs.BackgroundJobs
                 {
                     break;
                 }
-                else
+
+                offset += fetchCount;
+                await Task.Delay(_delayConfiguration.CreateArtistBackgroundJob_FromPlaylistDelay);
+            }
+        }
+
+        private async Task FromUser(ulong userId, Folder folder)
+        {
+            uint offset = 0;
+            uint fetchCount = 250;
+
+            while (true)
+            {
+                var artists = await _deezerApiService.GetDeezerApi().User.GetFavouriteArtists(userId, CancellationToken.None, offset, fetchCount);
+                if (!artists.Any()) break;
+
+                foreach (var artist in artists)
                 {
-                    offset += 50;
+                    await CheckAndCreateArtist(artist, folder);
                 }
 
-                await Task.Delay(500);
+                offset += fetchCount;
+                await Task.Delay(_delayConfiguration.CreateArtistBackgroundJob_FromUserDelay);
             }
         }
 
@@ -98,7 +126,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
                     {
                         await CheckAndCreateArtist(await _deezerApiService.GetDeezerApi().Artists.GetById(artistId, CancellationToken.None), folder);
 
-                        await Task.Delay(500);
+                        await Task.Delay(_delayConfiguration.CreateArtistBackgroundJob_FromCsvDelay);
                     }
                 }
             }

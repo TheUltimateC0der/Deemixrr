@@ -17,6 +17,8 @@ namespace Deemixrr.Data
         [NotMapped]
         public string NamePath => $"{Name} - ({Path})";
 
+        public Enums.ProcessingState State { get; set; }
+
         public long Size { get; set; }
     }
 }
