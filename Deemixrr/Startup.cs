@@ -52,6 +52,10 @@ namespace Deemixrr
             Configuration.Bind("JobConfiguration", jobConfiguration);
             services.AddSingleton(jobConfiguration);
 
+            var delayConfiguration = new DelayConfiguration();
+            Configuration.Bind("DelayConfiguration", delayConfiguration);
+            services.AddSingleton(delayConfiguration);
+
             //Hangfire
             services.AddHangfire(x =>
                 x.UseSqlServerStorage(connectionString)

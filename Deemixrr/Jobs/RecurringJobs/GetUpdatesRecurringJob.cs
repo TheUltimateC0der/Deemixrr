@@ -24,7 +24,7 @@ namespace Deemixrr.Jobs.RecurringJobs
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
         }
 
-        [MaximumConcurrentExecutions(1)]
+        [MaximumConcurrentExecutions(1, 1800)]
         public async Task Execute()
         {
             var updates = await _deezerApiService.GetDeezerApi().Genre.GetNewReleasesForGenre(0, CancellationToken.None, 0, 200);

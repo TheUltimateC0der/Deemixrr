@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using Deemixrr.Configuration;
 using Deemixrr.Data;
 using Deemixrr.Jobs.Models;
 using Deemixrr.Repositories;
@@ -17,12 +18,14 @@ namespace Deemixrr.Jobs.BackgroundJobs
 {
     public class CreatePlaylistBackgroundJob : IBackgroundJob<CreatePlaylistBackgroundJobData>
     {
+        private readonly DelayConfiguration _delayConfiguration;
         private readonly IDeezerApiService _deezerApiService;
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;
 
-        public CreatePlaylistBackgroundJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IMapper mapper)
+        public CreatePlaylistBackgroundJob(DelayConfiguration delayConfiguration, IDeezerApiService deezerApiService, IDataRepository dataRepository, IMapper mapper)
         {
+            _delayConfiguration = delayConfiguration ?? throw new ArgumentNullException(nameof(delayConfiguration));
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -36,24 +39,24 @@ namespace Deemixrr.Jobs.BackgroundJobs
 
             if (param.DeezerId != 0)
             {
-                await SinglePlaylist(param.DeezerId, folder);
+                await FromPlaylist(param.DeezerId, folder);
                 return;
             }
 
             if (string.IsNullOrEmpty(param.DeezerIds) == false)
             {
-                await MultiplePlaylist(param.DeezerIds, folder);
+                await FromCsv(param.DeezerIds, folder);
                 return;
             }
         }
 
 
-        private async Task SinglePlaylist(ulong playlistId, Folder folder)
+        private async Task FromPlaylist(ulong playlistId, Folder folder)
         {
             await CheckAndCreatePlaylist(await _deezerApiService.GetDeezerApi().Playlists.GetById(playlistId, CancellationToken.None), folder);
         }
 
-        private async Task MultiplePlaylist(string csv, Folder folder)
+        private async Task FromCsv(string csv, Folder folder)
         {
             if (csv.Contains(","))
             {
@@ -66,7 +69,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
                     {
                         await CheckAndCreatePlaylist(await _deezerApiService.GetDeezerApi().Playlists.GetById(artistId, CancellationToken.None), folder);
 
-                        await Task.Delay(500);
+                        await Task.Delay(_delayConfiguration.CreatePlaylistBackgroundJob_FromCsvDelay);
                     }
                 }
             }
