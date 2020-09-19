@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Deemixrr.Helpers;
 using Deemixrr.Repositories;
 using Deemixrr.Services;
 
@@ -16,12 +15,14 @@ namespace Deemixrr.Jobs.RecurringJobs
         private readonly IConfigurationService _configurationService;
         private readonly IDeezerApiService _deezerApiService;
         private readonly IDataRepository _dataRepository;
+        private readonly IDeemixService _deemixService;
 
-        public GetUpdatesRecurringJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IConfigurationService configurationService)
+        public GetUpdatesRecurringJob(IDeezerApiService deezerApiService, IDataRepository dataRepository, IConfigurationService configurationService, IDeemixService deemixService)
         {
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
+            _deemixService = deemixService ?? throw new ArgumentException(nameof(deemixService));
         }
 
         [MaximumConcurrentExecutions(1, 1800)]
@@ -46,14 +47,7 @@ namespace Deemixrr.Jobs.RecurringJobs
                             var dbArtist = await _dataRepository.GetArtist(album.Artist.Id);
                             if (dbArtist != null)
                             {
-                                var apiAlbum = await _deezerApiService.GetDeezerApi().Albums.GetById(album.Id, CancellationToken.None);
-
-                                album.Link.Deemix();
-
-                                dbArtist.NumberOfAlbums += 1;
-                                dbArtist.NumberOfTracks += apiAlbum.TrackCount;
-
-                                await _dataRepository.UpdateArtist(dbArtist);
+                                _deemixService.Download($"https://www.deezer.com/en/album/{album.Id}", dbArtist.Folder);
                             }
                         }
                     }
