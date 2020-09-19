@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
@@ -81,6 +82,7 @@ namespace Deemixrr.Controllers
         public async Task<IActionResult> Create()
         {
             var folders = await _dataRepository.GetFolders();
+            if (!folders.Any()) return View("AddFolderFirst");
 
             return View(new ArtistCreateInputModel
             {

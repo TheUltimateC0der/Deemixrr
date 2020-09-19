@@ -32,7 +32,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        [MaximumConcurrentExecutions(1, 1800)]
+        [MaximumConcurrentExecutions(1, 18000)]
         public async Task Execute(ulong param, bool queueNext = false)
         {
             var dbArtist = await _dataRepository.GetArtist(param);
