@@ -1,0 +1,23 @@
+﻿@model Deemixrr.Models.ArtistCreateInputModel
+
+@{
+    ViewData["Title"] = "Stop right there, criminal scum!";
+    ViewData["Message"] = "Nobody breaks the law on my watch!";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">
+                You violated the law!
+            </h4>
+            <p>
+                Slow down buddy. In order to manage your library better, you have to create a <a asp-controller="Folder" asp-action="Create">folder</a> first.
+            </p>
+            <hr>
+            <p class="mb-0">
+                If you want to read more about why you need to do that, you can check the <a href="https://github.com/TheUltimateC0der/Deemixrr/wiki" target="_blank">Wiki</a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -16,5 +16,10 @@ namespace Deemixrr.Services
         {
             string.Format(BaseCommand, $"https://www.deezer.com/en/playlist/{playlist.DeezerId}", playlist.Folder.Path).Deemix();
         }
+
+        public void Download(string url, Folder folder)
+        {
+            string.Format(BaseCommand, url, folder.Path).Deemix();
+        }
     }
 }
