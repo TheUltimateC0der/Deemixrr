@@ -9,11 +9,14 @@ using Deemixrr.Repositories;
 using Deemixrr.Services;
 
 using Hangfire;
+using Hangfire.Console;
+using Hangfire.Dashboard.Dark;
 
 using HangfireBasicAuthenticationFilter;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +39,11 @@ namespace Deemixrr
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            //ReverseProxy Fix https://docs.microsoft.com/de-de/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            });
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -58,8 +66,11 @@ namespace Deemixrr
 
             //Hangfire
             services.AddHangfire(x =>
+            {
                 x.UseSqlServerStorage(connectionString)
-            );
+                    .WithJobExpirationTimeout(TimeSpan.FromDays(3));
+                x.UseConsole();
+            });
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(connectionString)
@@ -83,13 +94,8 @@ namespace Deemixrr
         {
             InitializeDatabase(app);
 
-            //ReverseProxy Fix
+            //ReverseProxy Fix https://docs.microsoft.com/de-de/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1
             app.UseForwardedHeaders();
-            app.Use((context, next) =>
-            {
-                context.Request.Scheme = "https";
-                return next();
-            });
 
             if (env.IsDevelopment())
             {
@@ -99,7 +105,6 @@ namespace Deemixrr
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -144,8 +149,9 @@ namespace Deemixrr
         //Hangfire Initialization
         private void InitializeHangfire(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
         {
-            GlobalConfiguration.Configuration
-                .UseActivator(new HangfireActivator(serviceProvider));
+            GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
+            GlobalConfiguration.Configuration.UseDarkDashboard();
+
 
             applicationBuilder.UseHangfireServer(new BackgroundJobServerOptions
             {
@@ -161,9 +167,9 @@ namespace Deemixrr
                 } }
             });
 
-            RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(), Cron.Daily);
-            RecurringJob.AddOrUpdate<SizeCalculatorRecurringJob>(x => x.Execute(), jobConfiguration.SizeCalculatorRecurringJob);
-            RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(), jobConfiguration.GetUpdatesRecurringJob);
+            RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(null), Cron.Daily);
+            RecurringJob.AddOrUpdate<SizeCalculatorRecurringJob>(x => x.Execute(null), jobConfiguration.SizeCalculatorRecurringJob);
+            RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(null), jobConfiguration.GetUpdatesRecurringJob);
 
         }
 

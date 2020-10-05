@@ -43,7 +43,7 @@ namespace Deemixrr.Controllers
 
             foreach (var playlist in playlists)
             {
-                BackgroundJob.Enqueue<CheckPlaylistForUpdatesBackgroundJob>(x => x.Execute(playlist.DeezerId, false));
+                BackgroundJob.Enqueue<CheckPlaylistForUpdatesBackgroundJob>(x => x.Execute(playlist.DeezerId, null));
             }
 
             return View(nameof(Index), new PlaylistIndexInputViewModel
@@ -92,7 +92,7 @@ namespace Deemixrr.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            BackgroundJob.Enqueue<CreatePlaylistBackgroundJob>(x => x.Execute(_mapper.Map<CreatePlaylistBackgroundJobData>(model), false));
+            BackgroundJob.Enqueue<CreatePlaylistBackgroundJob>(x => x.Execute(_mapper.Map<CreatePlaylistBackgroundJobData>(model), null));
 
             return RedirectToAction(nameof(Index));
         }

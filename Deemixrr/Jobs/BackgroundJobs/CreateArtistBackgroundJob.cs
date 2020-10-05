@@ -14,6 +14,7 @@ using Deemixrr.Services;
 using E.Deezer.Api;
 
 using Hangfire;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.BackgroundJobs
 {
@@ -33,7 +34,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
         }
 
         [MaximumConcurrentExecutions(1)]
-        public async Task Execute(CreateArtistBackgroundJobData param, bool queueNext = false)
+        public async Task Execute(CreateArtistBackgroundJobData param, PerformContext context)
         {
             var folder = await _dataRepository.GetFolder(param.FolderId);
             if (folder == null) return;
@@ -145,7 +146,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
 
                 await _dataRepository.CreateArtist(newArtist);
 
-                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(deezerArtist.Id, false));
+                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(deezerArtist.Id, null));
             }
         }
     }

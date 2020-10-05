@@ -121,7 +121,7 @@ namespace Deemixrr.Controllers
 
             await _dataRepository.UpdateFolder(folder);
 
-            BackgroundJob.Enqueue<ImportArtistsBackgroundJob>(x => x.Execute(folder.Id, false));
+            BackgroundJob.Enqueue<ImportArtistsBackgroundJob>(x => x.Execute(folder.Id, null));
 
             return RedirectToAction(nameof(Index));
         }
