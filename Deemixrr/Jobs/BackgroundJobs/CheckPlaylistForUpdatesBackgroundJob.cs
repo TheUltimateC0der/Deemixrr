@@ -10,6 +10,7 @@ using Deemixrr.Repositories;
 using Deemixrr.Services;
 
 using Hangfire;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.BackgroundJobs
 {
@@ -31,7 +32,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
         }
 
         [MaximumConcurrentExecutions(1)]
-        public async Task Execute(ulong param, bool queueNext = false)
+        public async Task Execute(ulong param, PerformContext context)
         {
             var dbPlaylist = await _dataRepository.GetPlaylist(param);
             if (dbPlaylist == null)

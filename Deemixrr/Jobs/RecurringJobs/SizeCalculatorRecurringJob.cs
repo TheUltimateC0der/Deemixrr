@@ -6,6 +6,8 @@ using Deemixrr.Helpers;
 using Deemixrr.Repositories;
 
 using Hangfire;
+using Hangfire.Console;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.RecurringJobs
 {
@@ -19,11 +21,13 @@ namespace Deemixrr.Jobs.RecurringJobs
         }
 
         [MaximumConcurrentExecutions(1)]
-        public async Task Execute()
+        public async Task Execute(PerformContext context)
         {
             var folders = await _dataRepository.GetFolders();
 
-            foreach (var folder in folders)
+            var overallProgressbar = context.WriteProgressBar();
+
+            foreach (var folder in folders.WithProgress(overallProgressbar))
             {
                 folder.Size = IOHelpers.DirSize(new DirectoryInfo(folder.Path));
 

@@ -45,7 +45,7 @@ namespace Deemixrr.Controllers
 
             foreach (var artist in artists)
             {
-                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(artist.DeezerId, false));
+                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(artist.DeezerId, null));
             }
 
             return View(nameof(Index), new ArtistIndexInputViewModel
@@ -95,7 +95,7 @@ namespace Deemixrr.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            BackgroundJob.Enqueue<CreateArtistBackgroundJob>(x => x.Execute(_mapper.Map<CreateArtistBackgroundJobData>(model), false));
+            BackgroundJob.Enqueue<CreateArtistBackgroundJob>(x => x.Execute(_mapper.Map<CreateArtistBackgroundJobData>(model), null));
 
             return RedirectToAction(nameof(Index));
         }

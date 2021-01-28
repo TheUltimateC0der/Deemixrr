@@ -12,6 +12,7 @@ using Deemixrr.Services;
 using E.Deezer.Api;
 
 using Hangfire;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.BackgroundJobs
 {
@@ -33,7 +34,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
         }
 
         [MaximumConcurrentExecutions(1, 18000)]
-        public async Task Execute(ulong param, bool queueNext = false)
+        public async Task Execute(ulong param, PerformContext context)
         {
             var dbArtist = await _dataRepository.GetArtist(param);
             if (dbArtist == null)

@@ -7,6 +7,8 @@ using Deemixrr.Repositories;
 using Deemixrr.Services;
 
 using Hangfire;
+using Hangfire.Console;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.RecurringJobs
 {
@@ -26,8 +28,9 @@ namespace Deemixrr.Jobs.RecurringJobs
         }
 
         [MaximumConcurrentExecutions(1, 1800)]
-        public async Task Execute()
+        public async Task Execute(PerformContext context)
         {
+            var overallProgressbar = context.WriteProgressBar();
             var updates = await _deezerApiService.GetDeezerApi().Genre.GetNewReleasesForGenre(0, CancellationToken.None, 0, 200);
             if (updates != null)
             {
@@ -39,7 +42,7 @@ namespace Deemixrr.Jobs.RecurringJobs
                 {
                     if (latestAlbum.Id != lastChangeId)
                     {
-                        foreach (var album in updatesList)
+                        foreach (var album in updatesList.WithProgress(overallProgressbar))
                         {
                             if (latestAlbum.Id == lastChangeId)
                                 break;
@@ -48,6 +51,10 @@ namespace Deemixrr.Jobs.RecurringJobs
                             if (dbArtist != null)
                             {
                                 _deemixService.Download($"https://www.deezer.com/en/album/{album.Id}", dbArtist.Folder);
+
+                                dbArtist.Updated = DateTime.UtcNow;
+
+                                await _dataRepository.UpdateArtist(dbArtist);
                             }
                         }
                     }

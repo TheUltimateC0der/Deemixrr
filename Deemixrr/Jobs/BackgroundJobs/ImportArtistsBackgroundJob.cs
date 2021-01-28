@@ -11,6 +11,7 @@ using Deemixrr.Repositories;
 using Deemixrr.Services;
 
 using Hangfire;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.BackgroundJobs
 {
@@ -27,7 +28,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
             _delayConfiguration = delayConfiguration;
         }
 
-        public async Task Execute(string param, bool queueNext = false)
+        public async Task Execute(string param, PerformContext context)
         {
             var folder = await _dataRepository.GetFolder(param);
             if (folder != null)
@@ -56,7 +57,7 @@ namespace Deemixrr.Jobs.BackgroundJobs
                                         {
                                             ArtistDeezerId = firstArtist.Id,
                                             FolderId = folder.Id
-                                        }, false)
+                                        }, null)
                                 );
                             }
                         }

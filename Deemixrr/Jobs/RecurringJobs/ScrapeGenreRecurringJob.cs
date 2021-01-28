@@ -9,6 +9,7 @@ using Deemixrr.Repositories;
 using Deemixrr.Services;
 
 using Hangfire;
+using Hangfire.Server;
 
 namespace Deemixrr.Jobs.RecurringJobs
 {
@@ -26,7 +27,7 @@ namespace Deemixrr.Jobs.RecurringJobs
         }
 
         [MaximumConcurrentExecutions(1)]
-        public async Task Execute()
+        public async Task Execute(PerformContext context)
         {
             var genres = await _deezerApiService.GetDeezerApi().Genre.GetCommonGenre(CancellationToken.None);
 
