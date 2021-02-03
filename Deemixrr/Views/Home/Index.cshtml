@@ -72,7 +72,16 @@
                     </div>
                     <div class="col">
                         <p class="small text-muted mb-0">Storage</p>
-                        <span class="h3 mb-0">@(Model.FolderSizeCumulated / 1000000000)GB</span>
+                        <span class="h3 mb-0">
+                            @if (Model.FolderSizeCumulated > 1110000000000) 
+                            {
+                                (Model.FolderSizeCumulated / 1000000000000)TB
+                            }
+                            else
+                            {
+                                (Model.FolderSizeCumulated / 1000000000)GB
+                            }
+                        </span>
                     </div>
                 </div>
             </div>
