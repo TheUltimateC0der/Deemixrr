@@ -22,8 +22,11 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									 @(string.Join(",", Model.Artists.DeezerId))
+								<textarea class="form-control" rows="3" asp-for="Artists">
+									 @foreach (var artist in Model.Artists)
+									 {
+										 @(string.Join(",",artist.DeezerId))
+									 }
 								</textarea>
 							</div>
 						</div>
@@ -39,8 +42,11 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									  @(string.Join(",", Model.Artists.Name))
+								<textarea class="form-control" rows="3" asp-for="Artists">
+									 @foreach (var artist in Model.Artists)
+									 {
+										 @(string.Join(",",artist.Name))
+									 }
 								</textarea>
 							</div>
 						</div>
@@ -56,8 +62,11 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									 @(string.Join("\n", Model.Artists.Name))
+								<textarea class="form-control" rows="3" asp-for="Artists">
+									 @foreach (var artist in Model.Artists)
+									 {
+										 @(string.Join("\n",artist.Name))
+									 }
 								</textarea>
 							</div>
 						</div>
