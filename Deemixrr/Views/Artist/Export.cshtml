@@ -23,10 +23,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									 @foreach (var artist in Model.Artists)
-									{
-										@(String.Format("{0},", artist.DeezerId))
-									 }
+									 @(string.Join(",", Model.Artists.DeezerId))
 								</textarea>
 							</div>
 						</div>
@@ -43,10 +40,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									 @foreach (var artist in Model.Artists)
-									{
-										@(String.Format("{0},", artist.Name))
-									 }
+									  @(string.Join(",", Model.Artists.Name))
 								</textarea>
 							</div>
 						</div>
@@ -63,10 +57,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<textarea class="form-control" rows="3" asp-for="ArtistDeezerIds">
-									 @foreach (var artist in Model.Artists)
-									{
-										@(String.Format("{0}\n", artist.Name))
-									 }
+									 @(string.Join("\n", Model.Artists.Name))
 								</textarea>
 							</div>
 						</div>
