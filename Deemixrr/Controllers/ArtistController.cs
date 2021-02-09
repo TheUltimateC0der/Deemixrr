@@ -126,5 +126,16 @@ namespace Deemixrr.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Export()
+        {
+            var artists = await _dataRepository.GetArtists();
+
+            return View(new ArtistExportViewModel
+            {
+                Artists = artists
+            });
+        }
+
     }
 }
