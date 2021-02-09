@@ -121,5 +121,21 @@ namespace Deemixrr.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update()
+        {
+            var playlists = await _dataRepository.GetPlaylists();
+
+            foreach (var playlist in playlists)
+            {
+                BackgroundJob.Enqueue<CheckPlaylistForUpdatesBackgroundJob>(x => x.Execute(playlist.DeezerId, null));
+            }
+
+            return View(nameof(Index), new PlaylistIndexInputViewModel
+            {
+                Playlists = playlists
+            });
+        }
     }
 }
