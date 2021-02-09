@@ -137,5 +137,21 @@ namespace Deemixrr.Controllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> UpdateAll()
+        {
+            var artists = await _dataRepository.GetArtists();
+
+            foreach (var artist in artists)
+            {
+                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(artist.DeezerId, null));
+            }
+
+            return View(nameof(Index), new ArtistIndexInputViewModel
+            {
+                Artists = artists
+            });
+        }
+
     }
 }
