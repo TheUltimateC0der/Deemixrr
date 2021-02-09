@@ -170,7 +170,6 @@ namespace Deemixrr
             RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(null), Cron.Daily);
             RecurringJob.AddOrUpdate<SizeCalculatorRecurringJob>(x => x.Execute(null), jobConfiguration.SizeCalculatorRecurringJob);
             RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(null), jobConfiguration.GetUpdatesRecurringJob);
-
         }
 
     }
