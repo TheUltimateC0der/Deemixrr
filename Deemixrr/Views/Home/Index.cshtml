@@ -73,14 +73,10 @@
                     <div class="col">
                         <p class="small text-muted mb-0">Storage</p>
                         <span class="h3 mb-0">
-                            @if (Model.FolderSizeCumulated > 1110000000000) 
-                            {
-                                (Model.FolderSizeCumulated / 1000000000000)TB
+                            @{
+                                var bytes = Model.FolderSizeCumulated.Bytes();
                             }
-                            else
-                            {
-                                (Model.FolderSizeCumulated / 1000000000)GB
-                            }
+                            @bytes.LargestWholeNumberValue @bytes.LargestWholeNumberSymbol
                         </span>
                     </div>
                 </div>
