@@ -76,7 +76,7 @@
                             @{
                                 var bytes = Model.FolderSizeCumulated.Bytes();
                             }
-                            @bytes.ToString("#.###")
+                            @bytes.LargestWholeNumberValue.ToString("#.##") @bytes.LargestWholeNumberSymbol
                         </span>
                     </div>
                 </div>
