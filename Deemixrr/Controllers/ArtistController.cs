@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using AutoMapper;
 
 using Deemixrr.Data;
 using Deemixrr.Jobs.BackgroundJobs;
@@ -17,6 +13,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Deemixrr.Controllers
 {
@@ -135,6 +135,30 @@ namespace Deemixrr.Controllers
             {
                 Artists = artists
             });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update()
+        {
+            var artists = await _dataRepository.GetArtists();
+
+            return View(new ArtistUpdateViewModel
+            {
+                ArtistCount = artists.Count
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAll()
+        {
+            var artists = await _dataRepository.GetArtists();
+
+            foreach (var artist in artists)
+            {
+                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(artist.DeezerId, null));
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
     }
