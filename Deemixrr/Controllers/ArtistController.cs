@@ -130,10 +130,23 @@ namespace Deemixrr.Controllers
         public async Task<IActionResult> Export()
         {
             var artists = await _dataRepository.GetArtists();
+            string artistNames_csv = "";
+            string artistNames_newline = "";
+            string artistIDs_csv = "";
+
+            foreach (var artist in artists)
+            {
+                artistNames_csv = artistNames_csv + "," + artist.Name;
+                artistNames_newline = artistNames_newline + "\n" + artist.Name;
+                artistIDs_csv = artistIDs_csv + "," + artist.DeezerId;
+            }
 
             return View(new ArtistExportViewModel
             {
-                Artists = artists
+                Artists = artists,
+                Names_csv = artistNames_csv,
+                Names_newline = artistNames_newline,
+                IDs_csv = artistIDs_csv
             });
         }
 
