@@ -5,8 +5,8 @@
     ViewData["Message"] = "Here is list of all artists you have added.";
 }
 <div class="row">
-	<div class="col-md-12 mb-5">
-		 @if (Model.Artists?.Count == 0)
+    <div class="col-md-12 mb-5">
+        @if (Model.Artists?.Count == 0)
         {
             <div class="alert alert-info" role="alert">
                 #FeelsBadMan You currently have exactly 0 artists. I am pretty sure you want to create a new <a class="btn btn-xs btn-primary" asp-controller="Artist" asp-action="Create" role="button">artist</a>
@@ -14,56 +14,56 @@
         }
         else
         {
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">CSV export - Deezer ID</h5>
-					<h6 class="card-subtitle mb-2 text-muted">Copy all of your artists' Deezer IDs into a csv file</h6>
-					<hr />
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="Artists">
-									 @string.Join(",", Model.Artists.Select(x => x.DeezerId))
-								</textarea>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">CSV export - Artist Name</h5>
-					<h6 class="card-subtitle mb-2 text-muted">Copy all of your artists into a csv file</h6>
-					<hr />
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="Artists">
-									 @string.Join(",", Model.Artists.Select(x => x.Name))
-								</textarea>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="card">
-				<div class="card-body">
-					<h5 class="card-title">List export - Artist Name</h5>
-					<h6 class="card-subtitle mb-2 text-muted">Copy all of your artists into a list</h6>
-					<hr />
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<textarea class="form-control" rows="3" asp-for="Artists">
-									 @string.Join("\r\n", Model.Artists.Select(x => x.Name))
-								</textarea>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		}
-	</div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">CSV export - Deezer ID</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Copy all of your artists' Deezer IDs into a csv file</h6>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" asp-for="Artists">
+                                     @string.Join(",", Model.Artists.Select(x => x.DeezerId))
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">CSV export - Artist Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Copy all of your artists into a csv file</h6>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" asp-for="Artists">
+                                     @string.Join(",", Model.Artists.Select(x => x.Name))
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">List export - Artist Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Copy all of your artists into a list</h6>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" asp-for="Artists">
+                                     @string.Join("\r\n", Model.Artists.Select(x => x.Name))
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
