@@ -24,7 +24,7 @@ RUN curl https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
     dpkg -i packages-microsoft-prod.deb
 
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip apt-transport-https aspnetcore-runtime-3.1
+    apt-get install -y python3 python3-pip apt-transport-https aspnetcore-runtime-5.0
 
 COPY /etc /etc
 
