@@ -12,6 +12,7 @@ using HangfireBasicAuthenticationFilter;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -94,6 +95,11 @@ namespace Deemixrr
             InitializeDatabase(app);
             InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
             await InitializeLogin(app);
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             if (env.IsDevelopment())
             {
