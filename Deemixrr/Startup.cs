@@ -78,6 +78,12 @@ namespace Deemixrr
             });
 
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            });
+
+
             //Services
             services.AddSingleton<IDeezerApiService, DeezerApiService>();
             services.AddSingleton<IDeemixService, DeemixService>();
@@ -96,10 +102,7 @@ namespace Deemixrr
             InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
             await InitializeLogin(app);
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+            app.UseForwardedHeaders();
 
             if (env.IsDevelopment())
             {
