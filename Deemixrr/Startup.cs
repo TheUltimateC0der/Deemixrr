@@ -100,7 +100,6 @@ namespace Deemixrr
         {
             InitializeDatabase(app);
             InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
-            await InitializeLogin(app);
 
             app.UseForwardedHeaders();
 
@@ -127,6 +126,8 @@ namespace Deemixrr
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            await InitializeLogin(app);
         }
 
 
@@ -166,12 +167,11 @@ namespace Deemixrr
             using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
 
             var loginConfig = serviceScope.ServiceProvider.GetRequiredService<LoginConfiguration>();
+            var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             if (!string.IsNullOrEmpty(loginConfig.Username) && !string.IsNullOrEmpty(loginConfig.Password))
             {
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-
                 foreach (var identityUser in await appDbContext.Users.ToListAsync())
                 {
                     appDbContext.Users.Remove(identityUser);
