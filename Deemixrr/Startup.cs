@@ -12,13 +12,14 @@ using HangfireBasicAuthenticationFilter;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System;
+using System.Threading.Tasks;
 
 namespace Deemixrr
 {
@@ -33,41 +34,17 @@ namespace Deemixrr
 
 
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-            //ReverseProxy Fix https://docs.microsoft.com/de-de/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1
-            services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-            });
-
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-            // Config
-            var hangfireConfiguration = new HangFireConfiguration();
-            Configuration.Bind("Hangfire", hangfireConfiguration);
-            services.AddSingleton(hangfireConfiguration);
+            services.AddSingleton(Configuration.GetSection("Hangfire").Get<HangFireConfiguration>());
+            services.AddSingleton(Configuration.GetSection("JobConfiguration").Get<JobConfiguration>());
+            services.AddSingleton(Configuration.GetSection("DelayConfiguration").Get<DelayConfiguration>());
 
-            var deezerApiConfiguration = new DeezerApiConfiguration();
-            Configuration.Bind("DeezerApi", deezerApiConfiguration);
-            services.AddSingleton(deezerApiConfiguration);
-
-            var jobConfiguration = new JobConfiguration();
-            Configuration.Bind("JobConfiguration", jobConfiguration);
-            services.AddSingleton(jobConfiguration);
-
-            var delayConfiguration = new DelayConfiguration();
-            Configuration.Bind("DelayConfiguration", delayConfiguration);
-            services.AddSingleton(delayConfiguration);
-
-            //Hangfire
-            services.AddHangfire(x =>
-            {
-                x.UseInMemoryStorage().WithJobExpirationTimeout(TimeSpan.FromDays(3));
-                x.UseConsole();
-            });
+            var loginConfiguration = new LoginConfiguration();
+            Configuration.GetSection("LoginConfiguration").Bind(loginConfiguration);
+            services.AddSingleton(loginConfiguration);
 
             services.AddDbContext<AppDbContext>(options =>
             {
@@ -83,8 +60,22 @@ namespace Deemixrr
 
             services.AddDefaultIdentity<User>(options =>
             {
-                options.User.AllowedUserNameCharacters = null;
+                options.SignIn.RequireConfirmedAccount = false;
+
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
             }).AddEntityFrameworkStores<AppDbContext>();
+
+            services.AddHangfire(x =>
+            {
+                x.UseInMemoryStorage().WithJobExpirationTimeout(TimeSpan.FromDays(3));
+                x.UseConsole();
+            });
+
 
             //Services
             services.AddSingleton<IDeezerApiService, DeezerApiService>();
@@ -93,20 +84,21 @@ namespace Deemixrr
             services.AddScoped<IConfigurationService, ConfigurationService>();
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddControllersWithViews();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
         {
             InitializeDatabase(app);
-
-            //ReverseProxy Fix https://docs.microsoft.com/de-de/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-3.1
-            app.UseForwardedHeaders();
+            InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
+            await InitializeLogin(app);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -121,26 +113,13 @@ namespace Deemixrr
             app.UseAuthentication();
             app.UseAuthorization();
 
-            InitializeHangfire(app, serviceProvider, hangFireConfiguration, jobConfiguration);
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-
-                endpoints.MapHangfireDashboard(new DashboardOptions
-                {
-                    Authorization = new[]
-                    {
-                        new HangfireCustomBasicAuthenticationFilter
-                        {
-                            User = hangFireConfiguration.Username ?? "Admin",
-                            Pass = hangFireConfiguration.Password ?? "SuperSecurePWD!123"
-                        }
-                    }
-                });
             });
         }
+
 
         private void InitializeDatabase(IApplicationBuilder app)
         {
@@ -149,7 +128,6 @@ namespace Deemixrr
             serviceScope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
         }
 
-        //Hangfire Initialization
         private void InitializeHangfire(IApplicationBuilder applicationBuilder, IServiceProvider serviceProvider, HangFireConfiguration hangFireConfiguration, JobConfiguration jobConfiguration)
         {
             GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
@@ -174,5 +152,25 @@ namespace Deemixrr
             RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(null), jobConfiguration.GetUpdatesRecurringJob);
         }
 
+        private async Task InitializeLogin(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+
+            var loginConfig = serviceScope.ServiceProvider.GetRequiredService<LoginConfiguration>();
+
+            if (!string.IsNullOrEmpty(loginConfig.Username) && !string.IsNullOrEmpty(loginConfig.Password))
+            {
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                foreach (var identityUser in await appDbContext.Users.ToListAsync())
+                {
+                    appDbContext.Users.Remove(identityUser);
+                }
+                await appDbContext.SaveChangesAsync();
+
+                await userManager.CreateAsync(new User { UserName = loginConfig.Username, EmailConfirmed = true }, loginConfig.Password);
+            }
+        }
     }
 }

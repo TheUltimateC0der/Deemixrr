@@ -1,19 +1,15 @@
-﻿using System.Net.Http;
+﻿using E.Deezer;
 
-using Deemixrr.Configuration;
-
-using E.Deezer;
+using System.Net.Http;
 
 namespace Deemixrr.Services
 {
     public class DeezerApiService : IDeezerApiService
     {
         private DeezerSession _deezerSession;
-        private readonly DeezerApiConfiguration _deezerApiConfiguration;
 
-        public DeezerApiService(DeezerApiConfiguration deezerApiConfiguration)
+        public DeezerApiService()
         {
-            _deezerApiConfiguration = deezerApiConfiguration;
         }
 
         public DeezerSession GetDeezerApi()
