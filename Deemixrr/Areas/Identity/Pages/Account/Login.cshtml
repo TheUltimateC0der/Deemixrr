@@ -11,18 +11,12 @@
         <h2 class="my-3">Sign In</h2>
     </div>
     <div class="form-group">
-        <label asp-for="Input.Email" class="sr-only">Email address</label>
-        <input asp-for="Input.Email" class="form-control form-control-lg">
+        <label asp-for="Input.Username" class="sr-only"></label>
+        <input asp-for="Input.Username" class="form-control form-control-lg">
     </div>
     <div class="form-group">
-        <label asp-for="Input.Password" class="sr-only">Password</label>
+        <label asp-for="Input.Password" class="sr-only"></label>
         <input asp-for="Input.Password" class="form-control form-control-lg">
-    </div>
-    <div class="checkbox mb-3">
-        <label asp-for="Input.RememberMe">
-            <input asp-for="Input.RememberMe" />
-            @Html.DisplayNameFor(m => m.Input.RememberMe)
-        </label>
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Let me in</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2018 - @DateTime.Now.Year</p>

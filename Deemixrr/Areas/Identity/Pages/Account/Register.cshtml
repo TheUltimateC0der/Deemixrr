@@ -10,33 +10,14 @@
         <h2 class="my-3">Sign Up</h2>
     </div>
     <div class="form-group">
-        <label asp-for="Input.Email">Email</label>
-        <input asp-for="Input.Email" class="form-control">
+        <label asp-for="Input.Username"></label>
+        <input asp-for="Input.Username" class="form-control">
     </div>
-    <hr class="my-4">
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label asp-for="Input.Password">New Password</label>
-                <input asp-for="Input.Password" class="form-control">
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <input asp-for="Input.ConfirmPassword" class="form-control">
-            </div>
-        </div>
-        <div class="col-md-6">
-            <p class="mb-2">Password requirements</p>
-            <p class="small text-muted mb-2">To create a new password, you have to meet all of the following requirements:</p>
-            <ul class="small text-muted pl-4 mb-0">
-                <li>Minimum 8 character </li>
-                <li>At least one special character</li>
-                <li>At least one number</li>
-                <li>Just don´t be an idiot, and use a safe password</li>
-            </ul>
-        </div>
+    <div class="form-group">
+        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" class="form-control">
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Sign up</button>
     <p class="mt-5 mb-3 text-muted text-center">&copy; 2018 - @DateTime.Now.Year</p>
 </form>
 

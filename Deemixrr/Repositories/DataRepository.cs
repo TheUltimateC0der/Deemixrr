@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Deemixrr.Data;
+
+using Microsoft.EntityFrameworkCore;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Deemixrr.Data;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace Deemixrr.Repositories
 {
@@ -53,6 +53,7 @@ namespace Deemixrr.Repositories
         {
             return await _appDbContext.Artists
                 .Include(x => x.Folder)
+                .OrderBy(x => x.Name)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
@@ -124,6 +125,7 @@ namespace Deemixrr.Repositories
         public async Task<IList<Folder>> GetFolders(int skip, int take)
         {
             return await _appDbContext.Folders
+                .OrderBy(x => x.Name)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
@@ -206,6 +208,7 @@ namespace Deemixrr.Repositories
         {
             return await _appDbContext.Playlists
                 .Include(x => x.Folder)
+                .OrderBy(x => x.Name)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
