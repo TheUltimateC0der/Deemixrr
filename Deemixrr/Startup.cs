@@ -1,7 +1,3 @@
-using System;
-
-using AutoMapper;
-
 using Deemixrr.Configuration;
 using Deemixrr.Data;
 using Deemixrr.Jobs.RecurringJobs;
@@ -21,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+using System;
 
 namespace Deemixrr
 {
@@ -67,14 +65,22 @@ namespace Deemixrr
             //Hangfire
             services.AddHangfire(x =>
             {
-                x.UseSqlServerStorage(connectionString)
-                    .WithJobExpirationTimeout(TimeSpan.FromDays(3));
+                x.UseInMemoryStorage().WithJobExpirationTimeout(TimeSpan.FromDays(3));
                 x.UseConsole();
             });
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(connectionString)
-            );
+            {
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    options.UseSqlite("Data Source=deemixrr.db", x => x.MigrationsAssembly("Deemixrr.Data.Migrations.Sqlite"));
+                }
+                else
+                {
+                    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), x => x.MigrationsAssembly("Deemixrr.Data.Migrations.Mysql"));
+                }
+            });
+
             services.AddDefaultIdentity<User>(options =>
             {
                 options.User.AllowedUserNameCharacters = null;
@@ -138,12 +144,9 @@ namespace Deemixrr
 
         private void InitializeDatabase(IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var appDb = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                //appDb.Database.EnsureCreated();
-                appDb.Database.Migrate();
-            }
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+
+            serviceScope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
         }
 
         //Hangfire Initialization
@@ -151,7 +154,6 @@ namespace Deemixrr
         {
             GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
             GlobalConfiguration.Configuration.UseDarkDashboard();
-
 
             applicationBuilder.UseHangfireServer(new BackgroundJobServerOptions
             {
@@ -170,7 +172,6 @@ namespace Deemixrr
             RecurringJob.AddOrUpdate<ScrapeGenreRecurringJob>(x => x.Execute(null), Cron.Daily);
             RecurringJob.AddOrUpdate<SizeCalculatorRecurringJob>(x => x.Execute(null), jobConfiguration.SizeCalculatorRecurringJob);
             RecurringJob.AddOrUpdate<GetUpdatesRecurringJob>(x => x.Execute(null), jobConfiguration.GetUpdatesRecurringJob);
-
         }
 
     }
