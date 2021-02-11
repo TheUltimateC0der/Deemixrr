@@ -39,23 +39,6 @@ namespace Deemixrr.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Test()
-        {
-            var artists = await _dataRepository.GetArtists();
-
-            foreach (var artist in artists)
-            {
-                BackgroundJob.Enqueue<CheckArtistForUpdatesBackgroundJob>(x => x.Execute(artist.DeezerId, null));
-            }
-
-            return View(nameof(Index), new ArtistIndexInputViewModel
-            {
-                Artists = artists
-            });
-        }
-
-
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var artists = await _dataRepository.GetArtists(0, 100);

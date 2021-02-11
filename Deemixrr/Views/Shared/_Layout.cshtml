@@ -148,6 +148,20 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a href="#settings" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                            <i class="fe fe-settings fe-16"></i>
+                            <span class="ml-3 item-text">Settings</span>
+                        </a>
+                        <ul class="collapse list-unstyled pl-4 w-100" id="settings">
+                            <li class="nav-item">
+                                <a class="nav-link pl-3" asp-controller="Settings" asp-action="Arl">
+                                    <span class="ml-1 item-text">Arl</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 <p class="text-muted nav-heading mt-4 mb-1">
                     <span>Useful Links</span>
@@ -188,6 +202,8 @@
 
                         <div class="row">
                             <div class="col">
+
+                                <partial name="_DeemixArlNotificationPartial" />
 
                                 @RenderBody()
                             </div>
