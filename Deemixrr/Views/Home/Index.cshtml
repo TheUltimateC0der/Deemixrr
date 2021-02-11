@@ -72,7 +72,12 @@
                     </div>
                     <div class="col">
                         <p class="small text-muted mb-0">Storage</p>
-                        <span class="h3 mb-0">@(Model.FolderSizeCumulated / 1000000000)GB</span>
+                        <span class="h3 mb-0">
+                            @{
+                                var bytes = Model.FolderSizeCumulated.Bytes();
+                            }
+                            @bytes.ToString("#.##")
+                        </span>
                     </div>
                 </div>
             </div>

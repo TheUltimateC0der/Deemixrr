@@ -1,0 +1,16 @@
+@model ArtistUpdateViewModel
+@{
+    ViewData["Title"] = "Update All Artists";
+    ViewData["Message"] = "Are you sure? This may take a long time.";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+            <form asp-controller="Artist" asp-action="UpdateAll" method="post">
+                <p>Do you really want to update <code>@Model.ArtistCount</code> artists right now?</p>
+                <button type="submit" class="btn btn-danger">Start!</button>
+            </form>
+        </div>
+    </div>
+</div>
