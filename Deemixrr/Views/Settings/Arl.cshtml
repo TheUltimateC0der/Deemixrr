@@ -1,0 +1,43 @@
+﻿@model SettingsArlInputViewModel
+
+@{
+    ViewData["Title"] = "Settings - arl";
+    ViewData["Message"] = "For deemix to proper function, keep your arl up to date";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Don´t know what to do ?</h4>
+            <p class="mb-0">
+                Have a look at our <a href="https://github.com/TheUltimateC0der/Deemixrr/wiki/.arl" target="_blank">Wiki</a> on how you get your arl, and why deemixrr needs it.
+            </p>
+        </div>
+
+        <form asp-controller="Settings" asp-action="Arl" method="post">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">arl content</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Enter your arl content</h6>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <textarea asp-for="Arl" class="form-control" rows="6"></textarea>
+                                <span asp-validation-for="Arl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-primary float-right">Submit</button>
+        </form>
+    </div>
+</div>

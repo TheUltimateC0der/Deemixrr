@@ -1,0 +1,43 @@
+﻿@inject IDeemixService DeemixService
+
+@{
+    var arl = await DeemixService.GetArl();
+}
+
+@if (arl == null)
+{
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">No .arl found!</h4>
+        <p class="mb-0">
+            No .arl file exists, therefore deemixrr cannot function properly. If you are just fooling around, to get familiar with deemixrr, everything is fine. If you want deemixrr properly function please be sure to create it <a asp-controller="Settings" asp-action="Arl">here</a>.
+        </p>
+    </div>
+}
+else
+{
+
+    @if (arl.LastWrite.AddDays(90) >= DateTime.Now)
+    {
+        @if (arl.LastWrite.AddDays(90).Subtract(DateTime.UtcNow).TotalDays <= 5)
+        {
+            <div class="alert alert-danger">
+                <h4 class="alert-heading">Your arl is about to expire soon!</h4>
+                <p class="mb-0">Your arl will expire in @arl.LastWrite.AddDays(90).Humanize(). You should update your arl asap <a asp-controller="Settings" asp-action="Arl">here</a> so deemix wont stop functioning.</p>
+            </div>
+        }
+        else if (arl.LastWrite.AddDays(90).Subtract(DateTime.UtcNow).TotalDays <= 30)
+        {
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">Your arl is about to expire</h4>
+                <p class="mb-0">Your arl will expire in @arl.LastWrite.AddDays(90).Humanize(). If you have some spare time, you can update your arl <a asp-controller="Settings" asp-action="Arl">here</a></p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            <h4 class="alert-heading">Your arl is expired!</h4>
+            <p class="mb-0">Your arl expired @arl.LastWrite.AddDays(90).Humanize(). Hurry up, and update your arl <a asp-controller="Settings" asp-action="Arl">here</a>!</p>
+        </div>
+    }
+}
