@@ -26,7 +26,7 @@ Deemixrr manages your artists and playlists completely automated. You add your f
 
 ## How to spin-up your own instance
 
-### Please have a look here: https://github.com/TheUltimateC0der/Deemixrr/wiki/Host-your-own
+### Please have a look here: https://github.com/TheUltimateC0der/Deemixrr/wiki
 
 ## Screenshots
 
