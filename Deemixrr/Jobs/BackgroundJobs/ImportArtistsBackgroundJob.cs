@@ -67,11 +67,9 @@ namespace Deemixrr.Jobs.BackgroundJobs
 
                     folder.State = Enums.ProcessingState.None;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     folder.State = Enums.ProcessingState.Failed;
-
-                    throw e;
                 }
 
                 await _dataRepository.UpdateFolder(folder);

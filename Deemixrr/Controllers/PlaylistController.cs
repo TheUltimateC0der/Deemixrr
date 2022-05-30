@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using AutoMapper;
 
 using Deemixrr.Data;
 using Deemixrr.Jobs.BackgroundJobs;
@@ -16,6 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
+
+using System;
+using System.Threading.Tasks;
 
 namespace Deemixrr.Controllers
 {
@@ -34,24 +34,6 @@ namespace Deemixrr.Controllers
             _deezerApiService = deezerApiService ?? throw new ArgumentNullException(nameof(deezerApiService));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> Test()
-        {
-            var playlists = await _dataRepository.GetPlaylists();
-
-            foreach (var playlist in playlists)
-            {
-                BackgroundJob.Enqueue<CheckPlaylistForUpdatesBackgroundJob>(x => x.Execute(playlist.DeezerId, null));
-            }
-
-            return View(nameof(Index), new PlaylistIndexInputViewModel
-            {
-                Playlists = playlists
-            });
-        }
-
 
         [HttpGet]
         public async Task<IActionResult> Index()
