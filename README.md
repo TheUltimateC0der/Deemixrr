@@ -1,3 +1,5 @@
+# Please note that this project is currently not working, work is ongoing to get everything working again.
+
 # Deemixrr
 
 Deemixrr manages your artists and playlists completely automated. You add your favorite artists and playlists, and Deemixrr does the rest for you.
